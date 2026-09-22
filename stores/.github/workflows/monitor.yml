@@ -1,0 +1,38 @@
+name: Pokémon Stock Monitor Cron
+
+on:
+  schedule:
+    # ⏰ Se ejecuta automáticamente cada 7 minutos exactos
+    - cron: '*/7 * * * *'
+  workflow_dispatch: # 🔘 Permite presionar el botón en la web de GitHub para probarlo de forma manual
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4 python-dotenv matplotlib
+
+    - name: Run Monitor
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: python main.py
+
+    # 🔥 El truco de la memoria: Guarda los cambios en tu base de datos SQLite
+    - name: Commit and Push Database Changes
+      run: |
+        git config --global user.name "GitHub Actions Bot"
+        git config --global user.email "actions@github.com"
+        git add database/database.db
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Auto-actualización de base de datos [Skip CI]" && git push)
