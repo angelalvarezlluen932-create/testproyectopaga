@@ -163,9 +163,9 @@ def ejecutar_monitor():
             # Si quedan más mensajes en la cola, aplicamos el lead time obligatorio de 10 segundos
             if indice < total_alertas:
                 print(
-                    "⏳ [Lead Time] Esperando 10 segundos antes del siguiente envío..."
+                    "⏳ [Lead Time] Esperando 5 segundos antes del siguiente envío..."
                 )
-                time.sleep(10)
+                time.sleep(5)
     else:
         print("\n✨ Ronda finalizada sin alertas pendientes.")
 
