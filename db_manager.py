@@ -6,6 +6,13 @@ DB_NAME = os.path.join("database", "database.db")
 
 def init_db():
     """Inicializa la tabla de productos dentro de database/database.db"""
+    
+    db_dir = os.path.dirname(DB_NAME)
+    
+    if db_dir and not os.path.exists(db_dir):
+        os.makedirs(db_dir, exist_ok=True)
+
+
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     
